@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
         ..add(
           const LoadGameEvent(
             solution: Word(letters: <Letter> [
-              Letter(letter: "J", evaluation: Evaluation.correct),
-              Letter(letter: "O", evaluation: Evaluation.correct),
-              Letter(letter: "U", evaluation: Evaluation.correct),
+              Letter(letter: "G", evaluation: Evaluation.correct),
+              Letter(letter: "A", evaluation: Evaluation.correct),
+              Letter(letter: "M", evaluation: Evaluation.correct),
               Letter(letter: "E", evaluation: Evaluation.correct),
               Letter(letter: "R", evaluation: Evaluation.correct),
             ])

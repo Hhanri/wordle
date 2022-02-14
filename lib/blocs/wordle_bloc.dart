@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
+import 'package:wordle/models/letter_model.dart';
 import 'package:wordle/models/word_model.dart';
 
 part 'wordle_event.dart';
@@ -19,7 +20,7 @@ class WordleBloc extends Bloc<WordleEvent, WordleState> {
     Emitter<WordleState> emit
   ) async {
     await Future<void>.delayed(const Duration(seconds: 1));
-    String dictionary = await rootBundle.loadString("/dictionary.txt");
+    String dictionary = await rootBundle.loadString("assets/words.txt");
 
     emit(
       WordleLoadedState(
@@ -67,11 +68,21 @@ class WordleBloc extends Bloc<WordleEvent, WordleState> {
           List<Word> guesses = (state.guesses.map((word) {
             return word.id == event.word.id
               ? Word(
-                id: event.word.id,
-                letters: List.generate(5,(index) => null)
-              )
+                  id: event.word.id,
+                  letters: List.generate(5,(index) => null)
+                )
               : word;
           }).toList());
+
+          emit(
+            WordleLoadedState(
+              solution: state.solution,
+              dictionary: state.dictionary,
+              guesses: guesses,
+              letterCount: letterCount - 5,
+              isNotInDictionary: true
+            )
+          );
         }
       }
     }
@@ -80,6 +91,46 @@ class WordleBloc extends Bloc<WordleEvent, WordleState> {
   void _onValidateGuessEvent(
     ValidateGuessEvent event,
     Emitter<WordleState> emit
-  ) async {
+  ) {
+    final state = this.state;
+    if (state is WordleLoadedState) {
+      List<String> solution = state.solution.letters.map((letter) => letter!.letter).toList();
+      List<String> guess = event.word.letters.map((letter)=> letter!.letter).toList();
+      List<Letter?> letters = event.word.letters;
+
+      if (listEquals(solution, guess)) {
+        emit(WordleSolvedState());
+      } else {
+        guess.asMap().forEach(
+          (index, value) {
+            if (identical(guess[index], solution[index])) {
+              letters[index] = letters[index]!.copyWith(
+                evaluation: Evaluation.correct
+              );
+            } else if (solution.contains(guess[index])) {
+              letters[index] = letters[index]!.copyWith(
+                evaluation: Evaluation.present
+              );
+            } else {
+              letters[index] = letters[index]!.copyWith(
+                evaluation: Evaluation.missing
+              );
+            }
+          }
+        );
+        List<Word> validatedGuesses = state.guesses.map((guess) {
+          return guess.id == event.word.id ? event.word : guess;
+        }).toList();
+
+        emit(
+          WordleLoadedState(
+            solution: state.solution,
+            dictionary: state.dictionary,
+            guesses: validatedGuesses,
+            letterCount: state.letterCount
+          )
+        );
+      }
+    }
   }
 }

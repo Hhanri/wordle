@@ -12,7 +12,20 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<WordleBloc, WordleState>(
-        listener: (context, state) {},
+        listenWhen: (previous, current) {
+          if (current is WordleLoadedState) {
+            return current.isNotInDictionary;
+          }
+          return false;
+        },
+        listener: (context, state) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Word not in dictionary"),
+              duration: Duration(milliseconds: 400),
+            )
+          );
+        },
         builder: (context, state) {
           if (state is WordleLoadingState) {
             return Center(
@@ -34,12 +47,14 @@ class HomeScreen extends StatelessWidget {
           }
           if (state is WordleSolvedState) {
             return Center(
-              child: Text(
-              "Congratulations, you won !",
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.secondary
+              child: FittedBox(
+                child: Text(
+                "Congratulations, you won !",
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.secondary
+                  ),
                 ),
               ),
             );

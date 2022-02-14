@@ -19,11 +19,11 @@ class LoadGameEvent extends WordleEvent {
 
 class UpdateGuessEvent extends WordleEvent {
   final Word word;
-  bool? isBackArrow = false;
+  final bool isBackArrow;
 
-  UpdateGuessEvent({
+  const UpdateGuessEvent({
     required this.word,
-    this.isBackArrow
+    required this.isBackArrow
   });
 
   @override

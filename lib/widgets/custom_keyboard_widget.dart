@@ -22,75 +22,83 @@ class CustomKeyboardWidget extends StatelessWidget {
           );
         }
         if (state is WordleLoadedState) {
-          var letters = state.guesses
+          Set<Letter?> letters = state.guesses
             .expand((element) => element.letters)
             .where((element) => element != null)
             .toSet();
-          return Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ...firstRow.map(
-                    (letter) =>
-                    CustomKeyWidget(
-                      text: letter,
-                      onTap: () {
-                        addLetter(letter, state, context);
-                      })
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ...secondRow.map(
-                    (letter) =>
-                    CustomKeyWidget(
-                      text: letter,
-                      onTap: () {
-                        addLetter(letter, state, context);
-                      })
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ...thirdRow.map(
-                    (letter) =>
-                    CustomKeyWidget(
-                      text: letter,
-                      onTap: () {
-                        addLetter(letter, state, context);
-                      })
-                  ),
-                  Container(
-                    width: 90,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: MyShapes.circularBorders,
-                      color: Colors.transparent,
-                      boxShadow: MyStyles.shadow
+          return FittedBox(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ...firstRow.map(
+                      (letter) =>
+                      CustomKeyWidget(
+                        evaluation: letters,
+                        text: letter,
+                        onTap: () {
+                          addLetter(letter, state, context);
+                        })
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ...secondRow.map(
+                      (letter) =>
+                      CustomKeyWidget(
+                        evaluation: letters,
+                        text: letter,
+                        onTap: () {
+                          addLetter(letter, state, context);
+                        })
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ...thirdRow.map(
+                      (letter) =>
+                      CustomKeyWidget(
+                        evaluation: letters,
+                        text: letter,
+                        onTap: () {
+                          addLetter(letter, state, context);
+                        })
                     ),
-                    margin: const EdgeInsets.all(4),
-                    child: InkWell(
-                      onTap: () {
-                        removeLetter(state, context);
-                      },
-                      child: Center(
-                        child: Text(
-                          'Back',
-                          style: MyStyles.textStyle
+                    Container(
+                      width: 90,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: MyShapes.circularBorders,
+                        color: Colors.transparent,
+                        boxShadow: MyStyles.shadow
+                      ),
+                      margin: const EdgeInsets.all(4),
+                      child: InkWell(
+                        onTap: () {
+                          removeLetter(state, context);
+                        },
+                        child: Center(
+                          child: Text(
+                            'Back',
+                            style: MyStyles.textStyle
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                ],
-              )
-            ],
+                    )
+                  ],
+                )
+              ],
+            ),
           );
-
+        } else {
+          return const Center(
+            child: Text("Something went wrong"),
+          );
         }
       },
     );
@@ -108,7 +116,7 @@ class CustomKeyboardWidget extends StatelessWidget {
 
     Word updatedWord = state.guesses[wordIndex].copyWith(letters: letters);
 
-    context.read<WordleBloc>().add(UpdateGuessEvent(word: updatedWord));
+    context.read<WordleBloc>().add(UpdateGuessEvent(word: updatedWord, isBackArrow: false));
   }
 
   void removeLetter(WordleLoadedState state, BuildContext context){
@@ -120,7 +128,7 @@ class CustomKeyboardWidget extends StatelessWidget {
       letters.add(null);
       Word updatedWord = state.guesses[wordIndex]
           .copyWith(letters: letters);
-      context.read<WordleBloc>().add(UpdateGuessEvent(word: updatedWord));
+      context.read<WordleBloc>().add(UpdateGuessEvent(word: updatedWord, isBackArrow: true));
     }
   }
 }

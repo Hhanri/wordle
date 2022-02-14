@@ -15,23 +15,45 @@ class CustomBoardTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    Color color = (letterCount > letterIndex)
+      ? letters[letterIndex]!.evaluation == Evaluation.pending
+        ? Colors.transparent
+        : letters[letterIndex]!.evaluation == Evaluation.correct
+          ? Theme.of(context).colorScheme.secondary
+          : letters[letterIndex]!.evaluation == Evaluation.present
+            ? Colors.yellow
+            : Colors.transparent
+      : Colors.transparent;
+
+    Color textColor = (letterCount > letterIndex)
+      ? letters[letterIndex]!.evaluation == Evaluation.pending || letters[letterIndex]!.evaluation == Evaluation.missing
+        ? Theme.of(context).colorScheme.secondary
+        : Theme.of(context).colorScheme.background
+      : Theme.of(context).colorScheme.secondary;
+
     return Container(
       margin: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         borderRadius: MyShapes.circularBorders,
+        color: color,
         border: Border.all(
           color: Theme.of(context).colorScheme.secondary,
           width: 2
         )
       ),
-      child: (letterCount > letterIndex)
-        ? Text(
-            letters[letterIndex]!.letter,
-            style: const TextStyle(
-              fontSize: 20
-            ),
-          )
-        : const Text("")
+      child: Center(
+        child: (letterCount > letterIndex)
+          ? Text(
+              letters[letterIndex]!.letter,
+              style: TextStyle(
+                fontSize: 20,
+                color: textColor
+              ),
+            )
+          : const Text("")
+      )
+
     );
   }
 }
