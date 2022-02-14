@@ -19,8 +19,12 @@ class LoadGameEvent extends WordleEvent {
 
 class UpdateGuessEvent extends WordleEvent {
   final Word word;
+  bool? isBackArrow = false;
 
-  const UpdateGuessEvent({required this.word});
+  UpdateGuessEvent({
+    required this.word,
+    this.isBackArrow
+  });
 
   @override
   List<Object> get props => [word];

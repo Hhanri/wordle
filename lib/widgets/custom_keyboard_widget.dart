@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wordle/blocs/wordle_bloc.dart';
+import 'package:wordle/models/letter_model.dart';
+import 'package:wordle/models/word_model.dart';
 import 'package:wordle/resources/theme.dart';
 import 'package:wordle/widgets/custom_key_widget.dart';
 
@@ -10,62 +14,113 @@ class CustomKeyboardWidget extends StatelessWidget {
     List<String> firstRow = ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P"];
     List<String> secondRow = ["Q", "S", "D", "F", "G", "H", "J", "K", "L", "M"];
     List<String> thirdRow = ["W", "X", "C", "V", "B", "N"];
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ...firstRow.map(
-              (letter) => CustomKeyWidget(
-              text: letter,
-              onTap: () {
-              })
-            )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ...secondRow.map(
-              (letter) => CustomKeyWidget(
-              text: letter,
-              onTap: () {
-              })
-            )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ...thirdRow.map(
-              (letter) => CustomKeyWidget(
-              text: letter,
-              onTap: () {
-              })
-            ),
-            Container(
-              width: 90,
-              height: 45,
-              decoration: BoxDecoration(
-                borderRadius: MyShapes.circularBorders,
-                color: Colors.transparent,
-                boxShadow: MyStyles.shadow
+    return BlocBuilder<WordleBloc, WordleState>(
+      builder: (context, state) {
+        if (state is WordleLoadingState) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (state is WordleLoadedState) {
+          var letters = state.guesses
+            .expand((element) => element.letters)
+            .where((element) => element != null)
+            .toSet();
+          return Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ...firstRow.map(
+                    (letter) =>
+                    CustomKeyWidget(
+                      text: letter,
+                      onTap: () {
+                        addLetter(letter, state, context);
+                      })
+                  )
+                ],
               ),
-              margin: const EdgeInsets.all(4),
-              child: InkWell(
-                onTap: () {
-                },
-                child: Center(
-                  child: Text(
-                    'Back',
-                    style: MyStyles.textStyle
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ...secondRow.map(
+                    (letter) =>
+                    CustomKeyWidget(
+                      text: letter,
+                      onTap: () {
+                        addLetter(letter, state, context);
+                      })
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ...thirdRow.map(
+                    (letter) =>
+                    CustomKeyWidget(
+                      text: letter,
+                      onTap: () {
+                        addLetter(letter, state, context);
+                      })
                   ),
-                ),
-              ),
-            )
-          ],
-        )
-      ],
+                  Container(
+                    width: 90,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      borderRadius: MyShapes.circularBorders,
+                      color: Colors.transparent,
+                      boxShadow: MyStyles.shadow
+                    ),
+                    margin: const EdgeInsets.all(4),
+                    child: InkWell(
+                      onTap: () {
+                        removeLetter(state, context);
+                      },
+                      child: Center(
+                        child: Text(
+                          'Back',
+                          style: MyStyles.textStyle
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          );
+
+        }
+      },
     );
+  }
+  void addLetter(String letter, WordleLoadedState state, BuildContext context){
+    int wordIndex = (state.letterCount/5).floor();
+    int letterIndex = (state.letterCount%5);
+    List<Letter?> letters = state.guesses[wordIndex].letters;
+
+    letters[letterIndex] = Letter(
+        id: state.letterCount,
+        letter: letter,
+        evaluation: Evaluation.pending
+    );
+
+    Word updatedWord = state.guesses[wordIndex].copyWith(letters: letters);
+
+    context.read<WordleBloc>().add(UpdateGuessEvent(word: updatedWord));
+  }
+
+  void removeLetter(WordleLoadedState state, BuildContext context){
+    if (state.letterCount % 5 != 0) {
+      int wordIndex = (state.letterCount/5).floor();
+      int letterIndex = (state.letterCount-1)%5;
+      List<Letter?> letters = state.guesses[wordIndex].letters;
+      letters.removeAt(letterIndex);
+      letters.add(null);
+      Word updatedWord = state.guesses[wordIndex]
+          .copyWith(letters: letters);
+      context.read<WordleBloc>().add(UpdateGuessEvent(word: updatedWord));
+    }
   }
 }

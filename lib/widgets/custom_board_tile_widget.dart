@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:wordle/models/letter_model.dart';
 import 'package:wordle/resources/theme.dart';
 
 class CustomBoardTileWidget extends StatelessWidget {
-  const CustomBoardTileWidget({Key? key}) : super(key: key);
+  final List<Letter?> letters;
+  final int letterCount;
+  final int letterIndex;
+  const CustomBoardTileWidget({
+    Key? key,
+    required this.letters,
+    required this.letterCount,
+    required this.letterIndex
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +24,14 @@ class CustomBoardTileWidget extends StatelessWidget {
           width: 2
         )
       ),
-      child: const Center(
-        child: Text(""),
-      ),
+      child: (letterCount > letterIndex)
+        ? Text(
+            letters[letterIndex]!.letter,
+            style: const TextStyle(
+              fontSize: 20
+            ),
+          )
+        : const Text("")
     );
   }
 }
