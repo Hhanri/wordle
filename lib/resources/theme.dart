@@ -32,3 +32,17 @@ class MyColors {
 class MyShapes {
   static final BorderRadiusGeometry circularBorders = BorderRadius.circular(5);
 }
+
+class MyStyles {
+  static final TextStyle textStyle = TextStyle(
+    fontSize: 18,
+    color: theme.colorScheme.onBackground
+  );
+  static final List<BoxShadow> shadow = [
+    BoxShadow(
+      color: theme.colorScheme.secondary,
+      blurRadius: 1,
+      spreadRadius: 1
+    )
+  ];
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wordle/widgets/custom_board_tile_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
         ),
         itemCount: 30,
         itemBuilder: (BuildContext context, int index) {
-          return CustomBoardTileWidget();
+          return const CustomBoardTileWidget();
         }
       ),
     );

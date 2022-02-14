@@ -18,13 +18,7 @@ class CustomKeyWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: MyShapes.circularBorders,
         color: Theme.of(context).colorScheme.primary,
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.secondary,
-            blurRadius: 1,
-            spreadRadius: 1
-          )
-        ]
+        boxShadow: MyStyles.shadow
       ),
       margin: const EdgeInsets.all(4),
       child: InkWell(
@@ -32,10 +26,7 @@ class CustomKeyWidget extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: TextStyle(
-              fontSize: 18,
-              color: Theme.of(context).colorScheme.onBackground
-            ),
+            style: MyStyles.textStyle
           ),
         ),
       ),
