@@ -21,10 +21,14 @@ ThemeData theme = ThemeData(
 );
 
 class MyColors {
-  static const mainColor = Color(0xFF000A1F);
-  static const primaryColor = Color(0xFF11FFEE);
-  static const secondaryColor = Color(0xFFFFFFFF);
-  static const backgroundColor = Color(0xFF000A1F);
-  static const errorColor = Color(0xDFFFFFFF);
-  static const sideColor = Color(0xFF2B2E4A);
+  static const Color mainColor = Color(0xFF000A1F);
+  static const Color primaryColor = Color(0xFF11FFEE);
+  static const Color secondaryColor = Color(0xFFFFFFFF);
+  static const Color backgroundColor = Color(0xFF000A1F);
+  static const Color errorColor = Color(0xDFFFFFFF);
+  static const Color sideColor = Color(0xFF2B2E4A);
+}
+
+class MyShapes {
+  static final BorderRadiusGeometry circularBorders = BorderRadius.circular(5);
 }
