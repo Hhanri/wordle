@@ -120,7 +120,9 @@ class WordleBloc extends Bloc<WordleEvent, WordleState> {
 
       if (listEquals(solution, guess)) {
         emit(WordleSolvedState());
-      } else {
+      } else if (state.letterCount == 30){
+        emit(WordleLostState());
+      }else {
         guess.asMap().forEach(
           (index, value) {
             if (identical(guess[index], solution[index])) {

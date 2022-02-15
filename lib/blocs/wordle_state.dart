@@ -7,6 +7,8 @@ abstract class WordleState extends Equatable{
   List<Object?> get props => [];
 }
 
+class WordleAppLauching extends WordleState {}
+
 class WordleLoadingState extends WordleState {}
 
 class WordleLoadedState extends WordleState {
@@ -35,3 +37,5 @@ class WordleLoadedState extends WordleState {
 }
 
 class WordleSolvedState extends WordleState {}
+
+class WordleLostState extends WordleState {}

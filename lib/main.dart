@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wordle/blocs/wordle_bloc.dart';
-import 'package:wordle/home_page.dart';
+import 'package:wordle/screens/main_page.dart';
 import 'package:wordle/resources/theme.dart';
 
 void main() {
@@ -15,11 +15,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => WordleBloc()
-        ..add(LoadGameEvent()),
+        ..emit(WordleAppLauching()),
       child: MaterialApp(
         title: 'Wordle',
         theme: theme,
-        home: const HomeScreen(),
+        home: const MainScreen(),
       ),
     );
   }
