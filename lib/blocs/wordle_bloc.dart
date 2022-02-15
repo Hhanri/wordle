@@ -33,12 +33,19 @@ class WordleBloc extends Bloc<WordleEvent, WordleState> {
     }
     Word solution = Word(letters: listRandomWord);
     print(solution);
-
+    List<Word> guesses = [
+      Word(id: 0, letters: List.generate(5, (index) => null)),
+      Word(id: 1, letters: List.generate(5, (index) => null)),
+      Word(id: 2, letters: List.generate(5, (index) => null)),
+      Word(id: 3, letters: List.generate(5, (index) => null)),
+      Word(id: 4, letters: List.generate(5, (index) => null)),
+      Word(id: 5, letters: List.generate(5, (index) => null)),
+    ];
     emit(
       WordleLoadedState(
         solution: solution,
         dictionary: dictionaryList,
-        guesses: Word.guesses
+        guesses: guesses
       )
     );
   }

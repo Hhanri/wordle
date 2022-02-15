@@ -48,13 +48,24 @@ class HomeScreen extends StatelessWidget {
           if (state is WordleSolvedState) {
             return Center(
               child: FittedBox(
-                child: Text(
-                "Congratulations, you won !",
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.secondary
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                    "Congratulations, you won !",
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.secondary
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          context.read<WordleBloc>().add(LoadGameEvent());
+                        },
+                        icon: Icon(Icons.refresh, color: Theme.of(context).colorScheme.secondary,)
+                    )
+                  ],
                 ),
               ),
             );
