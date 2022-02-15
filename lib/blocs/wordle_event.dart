@@ -9,12 +9,6 @@ abstract class WordleEvent extends Equatable{
 }
 
 class LoadGameEvent extends WordleEvent {
-  final Word solution;
-
-  const LoadGameEvent({required this.solution});
-
-  @override
-  List<Object> get props => [solution];
 }
 
 class UpdateGuessEvent extends WordleEvent {

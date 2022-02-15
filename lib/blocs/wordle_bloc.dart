@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -21,11 +22,22 @@ class WordleBloc extends Bloc<WordleEvent, WordleState> {
   ) async {
     await Future<void>.delayed(const Duration(seconds: 1));
     String dictionary = await rootBundle.loadString("assets/words.txt");
+    List<String> dictionaryList =  dictionary.split("\n").map((word) => word.toLowerCase()).toList();
+    String randomWord = dictionaryList[Random().nextInt(dictionaryList.length)];
+    print(randomWord);
+    List<Letter> listRandomWord = [];
+    for (var rune in randomWord.runes) {
+      listRandomWord.add(
+        Letter(letter: String.fromCharCode(rune).toUpperCase(), evaluation: Evaluation.correct)
+      );
+    }
+    Word solution = Word(letters: listRandomWord);
+    print(solution);
 
     emit(
       WordleLoadedState(
-        solution: event.solution,
-        dictionary: dictionary.split("\n").map((word) => word.toLowerCase()).toList(),
+        solution: solution,
+        dictionary: dictionaryList,
         guesses: Word.guesses
       )
     );
@@ -36,6 +48,7 @@ class WordleBloc extends Bloc<WordleEvent, WordleState> {
   ) async {
     final state = this.state;
     if (state is WordleLoadedState) {
+      print(state.solution);
       int letterCount;
       switch(event.isBackArrow) {
         case true:
