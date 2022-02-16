@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wordle/blocs/wordle_bloc.dart';
+import 'package:wordle/resources/strings.dart';
 import 'package:wordle/screens/game_page.dart';
 import 'package:wordle/screens/home_page.dart';
 import 'package:wordle/screens/loading_page.dart';
@@ -22,7 +23,7 @@ class MainScreen extends StatelessWidget {
         listener: (context, state) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text("Word not in dictionary"),
+              content: Text(SystemStrings.notInDictionary),
               duration: Duration(milliseconds: 400),
             )
           );
@@ -38,14 +39,14 @@ class MainScreen extends StatelessWidget {
             return GameScreen(state: state);
           }
           if (state is WordleSolvedState) {
-            return const GameEndScreen(text: "Congratulations, you won !");
+            return const GameEndScreen(text: TitleStrings.youWon);
           }
           if (state is WordleLostState) {
-            return const GameEndScreen(text: "You Lost");
+            return const GameEndScreen(text: TitleStrings.youLost);
           }
           return const Center(
             child: Text(
-              "Something went wrong"
+              SystemStrings.somethingWentWrong
             ),
           );
         },

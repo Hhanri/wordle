@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wordle/resources/strings.dart';
 import 'package:wordle/widgets/play_button_widget.dart';
 
 class GameEndScreen extends StatelessWidget {
@@ -26,7 +27,7 @@ class GameEndScreen extends StatelessWidget {
               ),
             ),
             const PlayButtonWidget(
-              text: "Play Again",
+              text: SystemStrings.playAgain,
               icon: Icon(Icons.refresh)
             )
           ],

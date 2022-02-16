@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wordle/resources/strings.dart';
 import 'package:wordle/widgets/play_button_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,11 +14,11 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "WORDLE GAME",
+            TitleStrings.appTitle,
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary
           ),),
-          const PlayButtonWidget(text: "PLAY", icon: Icon(Icons.play_arrow))
+          const PlayButtonWidget(text: SystemStrings.play, icon: Icon(Icons.play_arrow))
         ],
       ),
     );
