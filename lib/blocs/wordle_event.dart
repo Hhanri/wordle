@@ -8,6 +8,9 @@ abstract class WordleEvent extends Equatable{
   List<Object> get props => [];
 }
 
+class LaunchAppEvent extends WordleEvent {
+}
+
 class LoadGameEvent extends WordleEvent {
 }
 

@@ -13,43 +13,48 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<WordleBloc, WordleState>(
-        listenWhen: (previous, current) {
-          if (current is WordleLoadedState) {
-            return current.isNotInDictionary;
-          }
-          return false;
-        },
-        listener: (context, state) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(SystemStrings.notInDictionary),
-              duration: Duration(milliseconds: 400),
-            )
-          );
-        },
-        builder: (context, state) {
-          if (state is WordleAppLauching) {
-            return const HomeScreen();
-          }
-          if (state is WordleLoadingState) {
-            return const LoadingScreen();
-          }
-          if (state is WordleLoadedState) {
-            return GameScreen(state: state);
-          }
-          if (state is WordleSolvedState) {
-            return const GameEndScreen(text: TitleStrings.youWon);
-          }
-          if (state is WordleLostState) {
-            return const GameEndScreen(text: TitleStrings.youLost);
-          }
-          return const Center(
-            child: Text(
-              SystemStrings.somethingWentWrong
-            ),
-          );
-        },
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: BlocConsumer<WordleBloc, WordleState>(
+            listenWhen: (previous, current) {
+              if (current is WordleLoadedState) {
+                return current.isNotInDictionary; //triggers listener when returns true (when not in dictionary)
+              }
+              return false;
+            },
+            listener: (context, state) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(SystemStrings.notInDictionary),
+                  duration: Duration(milliseconds: 400),
+                )
+              );
+            },
+            builder: (context, state) {
+              if (state is WordleAppLauching) {
+                return const HomeScreen();
+              }
+              if (state is WordleLoadingState) {
+                return const LoadingScreen();
+              }
+              if (state is WordleLoadedState) {
+                return GameScreen(state: state);
+              }
+              if (state is WordleSolvedState) {
+                return const GameEndScreen(text: TitleStrings.youWon);
+              }
+              if (state is WordleLostState) {
+                return const GameEndScreen(text: TitleStrings.youLost);
+              }
+              return const Center(
+                child: Text(
+                  SystemStrings.somethingWentWrong
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

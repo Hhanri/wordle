@@ -14,12 +14,27 @@ class WordleBloc extends Bloc<WordleEvent, WordleState> {
     on<LoadGameEvent>(_onLoadGameEvent);
     on<UpdateGuessEvent>(_onUpdateGuessEvent);
     on<ValidateGuessEvent>(_onValidateGuessEvent);
+    on<LaunchAppEvent>(_onLaunchAppEvent);
+  }
+
+  void _onLaunchAppEvent(
+    LaunchAppEvent event,
+    Emitter<WordleState> emit
+    ) {
+    emit(
+      WordleAppLauching()
+    );
   }
 
   void _onLoadGameEvent(
     LoadGameEvent event,
     Emitter<WordleState> emit
   ) async {
+
+    emit(
+      WordleLoadingState()
+    );
+
     await Future<void>.delayed(const Duration(seconds: 1));
     String dictionary = await rootBundle.loadString("assets/words.txt");
     List<String> dictionaryList =  dictionary.split("\n").map((word) => word.toLowerCase()).toList();
